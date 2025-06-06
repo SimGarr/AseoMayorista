@@ -56,7 +56,7 @@ spring.jpa.hibernate.ddl-auto=update
 
 4. CONFIGURAR WEBPAY:
 --------------------
-En CarritoController.java actualizar:
+En CarritoController.java actualizar en el metodo /retorno:
 response.sendRedirect("http://127.0.0.1:5500/pagoexitoso.html");
 (response.sendRedirect("http://127.0.0.1:5500/pagorechazado.html");
 
