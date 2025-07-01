@@ -178,43 +178,4 @@ public class ProductoController {
         }
     }
 
-    @Operation(summary = "Asignar URL de imagen a producto")
-    @PutMapping("/{id}/imagen")
-    public ResponseEntity<?> asignarUrlImagen(@PathVariable Long id, @RequestBody ImagenUrlDTO imagenDto) {
-        try {
-            Producto producto = servicio.obtenerPorId(id);
-            if (producto == null) {
-                return ResponseEntity.notFound().build();
-            }
-            producto.setImagenUrl(imagenDto.getImagenUrl());
-            servicio.guardar(producto);
-            return ResponseEntity.ok(producto);
-        } catch (Exception e) {
-            logger.error("Error al asignar URL de imagen producto id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Error al asignar URL de imagen");
-        }
-    }
-
-    // Nuevo endpoint para subir imagen a Cloudinary y asignar la URL al producto
-    @Operation(summary = "Subir imagen y asignar URL a producto")
-    @PostMapping("/{id}/imagen/upload")
-    public ResponseEntity<?> subirImagenYAsignar(@PathVariable Long id, @RequestParam("archivo") MultipartFile archivo) {
-        try {
-            Producto producto = servicio.obtenerPorId(id);
-            if (producto == null) {
-                return ResponseEntity.notFound().build();
-            }
-            String urlImagen = cloudinaryService.subirImagen(archivo);
-            producto.setImagenUrl(urlImagen);
-            servicio.guardar(producto);
-            logger.info("Imagen subida y URL asignada a producto id={}", id);
-            return ResponseEntity.ok(producto);
-        } catch (IOException e) {
-            logger.error("Error al subir imagen a Cloudinary para producto id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Error al subir imagen");
-        } catch (Exception e) {
-            logger.error("Error inesperado al subir imagen para producto id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.internalServerError().body("Error al asignar imagen");
-        }
-    }
 }
